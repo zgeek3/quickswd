@@ -1,6 +1,6 @@
 README
 
-These are webdriver (or selenium2) scripts
+These are webdriver (or selenium2) python3 scripts
 These scripts make it easy to create quick scripts for running smoke tests that create screenshots and compare them to baseline screenshots. 
 
 There are basic functions in "SELENIUM_functions.py" that make it easy to create and update the scripts. But the idea is that these functions should be expanded based on how the site works.  For example if logging in is a common action in testing then a function for logging in should be created as well which would be specific to the site.
@@ -17,8 +17,8 @@ SETUP:
 
 
 To run individual tests:
--- .py files can be run alone
--- .csv are run as ./SETUP_any_csv.py FILENAME.csv
+-- .py files can be run alone 
+-- .csv are run as ./SETUP_any_csv.py FILENAME.csv 
 
 There are two sample scripts:
  - test_example_1.py -- to run "python3 test_example_1.py"
