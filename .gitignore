@@ -1,0 +1,9 @@
+*.pyc
+config.csv
+__pycache__
+.DS_Store
+*.zip
+*.gz
+log/*.log
+log/*.log.[0-9]
+
