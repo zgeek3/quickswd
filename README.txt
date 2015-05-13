@@ -3,6 +3,8 @@ README
 These are webdriver (or selenium2) python3 scripts
 These scripts make it easy to create quick scripts for running smoke tests that create screenshots and compare them to baseline screenshots. 
 
+For a quick look at sample comparison images view the samples included:  https://github.com/zgeek3/quickswd/tree/master/IMAGES/comparison_images
+
 There are basic functions in "SELENIUM_functions.py" that make it easy to create and update the scripts. But the idea is that these functions should be expanded based on how the site works.  For example if logging in is a common action in testing then a function for logging in should be created as well which would be specific to the site.
 
 These scripts have not yet been fully debugged at this point
