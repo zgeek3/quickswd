@@ -417,35 +417,53 @@ def scroll(bafc,scroll="1000",testname="NONE", snap="PIC"):
 def snapit(bafc,thingtodo,testname,snap):
 	browser = bafc[1]
 	trimthese = ["Firefox","IE11","LocalFirefox"]
+
 	if testname == "NONE":
 		testname = "TEST_" + (str(round(time.time()))) + "_" + thingtodo
 	if snap == "NO":
 		"Print -- This step does not require picture.  If you are expecting a picture please doublecheck your test."
+	if snap != "NO": 
+		# to avoid confusion the old image and any previous failure will be removed before the new image is created
+		# if snapshots are not taken then the old pictures will be left in place
+		if os.path.exists(bafc[3] + '/' + bafc[1] + '_' + testname + '.png'):
+			print("Deleting old screenshot")
+			os.remove(bafc[3] + '/' + bafc[1] + '_' + testname + '.png')
+		if os.path.exists(bafc[7] + '/' + bafc[1] + '_' + testname + '.png'):
+			print("Deleting old comparison")
+			os.remove(bafc[7] + '/' + bafc[1] + '_' + testname + '.png')
+		if os.path.exists(bafc[3] + '/' + bafc[1] + '_' + testname + '_FAILURE.png'):
+			print("Deleting old failure screenshot")
+			os.remove(bafc[3] + '/' + bafc[1] + '_' + testname + '_FAILURE.png')
+
 	if snap == "PIC":
+	
 		try:
 			time.sleep(5)
 			bafc[0].save_screenshot(bafc[3] + '/' + bafc[1] + '_' + testname + '.png')
 			if browser in trimthese:
 				os.system('convert -crop 1280x1024+0+0 ' + bafc[3] + '/' + bafc[1] + '_' + testname + '.png ' + bafc[3] + '/' + bafc[1] + '_' + testname + '.png')
-				print('convert -crop 1280x1024+0+0 ' + bafc[3] + '/' + bafc[1] + '_' + testname + '.png ' + bafc[3] + '/' + bafc[1] + '_' + testname + '.png')
+	
 		except:
 			print("Something went wrong with taking the picture of ",testname)
 	if snap != "NO" and snap != "PIC" and snap != "FAILED":
+		
 		try:
 			time.sleep(5)
 			bafc[0].save_screenshot(bafc[3] + '/' + bafc[1] + '_' + testname + '.png')
 			if browser in trimthese:
-				print('convert -crop 1280x1024+0+0 ' + bafc[3] + '/' + bafc[1] + '_' + testname + '.png ' + bafc[3] + '/' + bafc[1] + '_' + testname + '.png')
 				os.system('convert -crop 1280x1024+0+0 ' + bafc[3] + '/' + bafc[1] + '_' + testname + '.png ' + bafc[3] + '/' + bafc[1] + '_' + testname + '.png')
 		except:
 			print("Something went wrong with taking the picture of name: ",testname)
 
 	if snap == "FAILED":
+
+		if os.path.exists(bafc[3] + '/' + bafc[1] + '_' + testname + '_FAILURE.png'):
+			os.remove(bafc[3] + '/' + bafc[1] + '_' + testname + '_FAILURE.png')
 		try:
 			shutil.copyfile("./failure.png",bafc[3] + '/' + bafc[1] + '_' + testname + '.png')
 			shutil.copyfile("./failure.png",bafc[3] + '/' + bafc[1] + '_' + testname + '_FAILURE.png')
 		except:
-			print("The test failed but had a problem copying the error picture ot the right place")
+			print("The test failed but had a problem copying the error picture to the right place")
 
 	if bafc[9] == "YES" and snap != "NO": # This line was changed 4/29/2015 remove snap !="NO" if there is a problem.
 
@@ -460,6 +478,7 @@ def snapit(bafc,thingtodo,testname,snap):
 				os.system('convert ' + bafc[7] + '/' + filename + ' -alpha set -channel a -evaluate set 50% +channel ' +  bafc[7] + '/' + filename)
 				os.system('convert ' + bafc[3] + '/' + filename + ' ' + bafc[7] + '/' + filename + ' -flatten ' + bafc[7] + '/' + filename)
 			if not os.path.exists(bafc[7] + '/' + filename):
+				print("The file doesn't exist so they are a perfect match")
 				os.system('convert ' + bafc[3] + '/' + filename + ' ' + 'perfect_match.png' + ' -flatten ' + bafc[7] + '/' + filename)
 		if not os.path.exists(bafc[6] + '/' + bafc[1] + '_' + testname + '.png'):
 			print("Baseline image does not exist:  " + bafc[6] + '/' + bafc[1] + '_' + testname + '.png')
