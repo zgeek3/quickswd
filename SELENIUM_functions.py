@@ -40,45 +40,14 @@ def click(bafc,thingtodo,item,testname="NONE", snap="PIC"):
 	if testname != "NONE":
 		testname = testname + "_click_" + thingtodo + "_"
 
-	options = ["text","partialtext","id","css","xpath","class","name","tag"]
+	element = getelement(driver,thingtodo,item)
 
 	try:
-		if thingtodo == "text":
-			driver.find_element_by_link_text(item).click()			
-
-		if thingtodo == "partialtext":
-			driver.find_element_by_partial_link_text(item).click()
-
-		if thingtodo == "id":
-			driver.find_element_by_id(item).click()
-
-		if thingtodo == "css":
-			driver.find_element_by_css_selector(item).click()
-
-		if thingtodo == "xpath":
-			driver.find_element_by_xpath(item).click()
-
-		if thingtodo == "class":
-			driver.find_element_by_class_name(item).click()
-
-		if thingtodo == "name":
-			driver.find_element_by_name(item).click()
-
-		if thingtodo == "tag":
-			driver.find_element_by_tag_name(item).click()
-
-		if thingtodo in options:
-			print("Clicking ",thingtodo,":  ",item)
-
-		if thingtodo not in options:
-			print("The following option is not supported by click: ",thingtodo)
-			print("Please try one of the following supported options:",options)
-			snap = "FAILED"
-
+		print("Clicking ",thingtodo,":  ",item)
+		element.click()
 	except:
-			print("Clicking ",thingtodo,":  ",item, " failed")
-			snap = "FAILED"
-
+		print("Clicking ",thingtodo,":  ",item, " failed")
+		snap = "FAILED"
 
 	snapit(bafc,"click_" + thingtodo,testname,snap)
 
@@ -91,55 +60,21 @@ def clickthis(bafc,thingtodo,item,number,testname="NONE", snap="PIC"):
 	if testname != "NONE":
 		testname = testname + "_clickthis_" + thingtodo + "_"
 
-	options = ["text","partialtext","id","css","xpath","class","name","tag"]
-
+	elements = getelements(driver,thingtodo,item)
 
 	try:
-		if thingtodo == "text":
-			numbers = driver.find_elements_by_link_text(item)	
-
-		if thingtodo == "partialtext":
-			numbers=driver.find_elements_by_partial_link_text(item)
-
-		if thingtodo == "id":
-			numbers=driver.find_elements_by_id(item)
-
-		if thingtodo == "css":
-			numbers=driver.find_elements_by_css_selector(item)
-
-		if thingtodo == "xpath":
-			numbers=driver.find_elements_by_xpath(item)
-
-		if thingtodo == "class":
-			numbers=driver.find_elements_by_class_name(item)
-
-		if thingtodo == "name":
-			numbers=driver.find_elements_by_name(item)
-
-		if thingtodo == "tag":
-			numbers=driver.find_elements_by_tag_name(item)
-
-		if thingtodo in options:
-
-			if number != "loop":
-				print("Clicking ",thingtodo,":  ",item, " number:  ",number)
-				i=int(number)
-				numbers[i].click()
-				snapit(bafc,"clickthis_" + thingtodo,testname,snap)
-			if number == "loop":
-				these = len(numbers)
-				for i in range(0,these):
-					print("Clicking ",thingtodo,":  ",item, " number:  ",i)
-					numbers[i].click()
-					time.sleep(5)
-					snapit(bafc,"clickthis_" + thingtodo + "_" + str(i),testname,snap)
-
-		if thingtodo not in options:
-			print("The following option is not supported by click: ",thingtodo)
-			print("Please try one of the following supported options:",options)
-			snap = "FAILED"
+		if number != "loop":
+			print("Clicking ",thingtodo,":  ",item, " number:  ",number)
+			i=int(number)
+			elements[i].click()
 			snapit(bafc,"clickthis_" + thingtodo,testname,snap)
-
+		if number == "loop":
+			these = len(elements)
+			for i in range(0,these):
+				print("Clicking ",thingtodo,":  ",item, " number:  ",i)
+				elements[i].click()
+				time.sleep(5)
+				snapit(bafc,"clickthis_" + thingtodo + "_" + str(i),testname,snap)
 	except:
 			print("Clicking ",thingtodo,":  ",item, " failed.  Recheck the element and the index number.")
 			snap = "FAILED"
@@ -148,55 +83,24 @@ def clickthis(bafc,thingtodo,item,number,testname="NONE", snap="PIC"):
 # This function will clear text from a field and enter text to that field.
 
 def entertext(bafc,thingtodo,item,text,testname="NONE", snap="PIC"):
+
 	driver = bafc[0]
 	if testname != "NONE":
 		testname = testname + "_entertext_" + thingtodo + "_"
 
-	options = ["id","css","xpath","class","name","tag"]
-	print("This is the text:  ",text)
-
 	if "\\n" in text:
 		text = text.replace("\\n","") + "\n"
 
+	element = getelement(driver,thingtodo,item)
 
 	try:
-
-		if thingtodo == "id":
-			driver.find_element_by_id(item).clear()
-			driver.find_element_by_id(item).send_keys(text)
-
-		if thingtodo == "css":
-			driver.find_element_by_css_selector(item).clear()
-			driver.find_element_by_css_selector(item).send_keys(text)
-
-		if thingtodo == "xpath":
-			driver.find_element_by_xpath(item).clear()
-			driver.find_element_by_xpath(item).send_keys(text)
-
-		if thingtodo == "class":
-			driver.find_element_by_class_name(item).clear()
-			driver.find_element_by_class_name(item).send_keys(text)
-
-		if thingtodo == "name":
-			driver.find_element_by_name(item).clear()
-			driver.find_element_by_name(item).send_keys(text)
-
-		if thingtodo == "tag":
-			driver.find_element_by_tag_name(item).clear()
-			driver.find_element_by_tag_name(item).send_keys(text)
-
-		if thingtodo in options:
-			print("Entering text: ",text.replace("\n"," ")," For:  ",thingtodo,":  ",item)
-
-		if thingtodo not in options:
-			print("The following option is not supported for entering text: ",thingtodo)
-			print("Please try one of the following supported options:",options)
-			snap = "FAILED"
+		print("Entering text: ",text.replace("\n"," ")," For:  ",thingtodo,":  ",item)
+		element.clear()
+		element.send_keys(text)
 
 	except:
-			print("Entering text: ",text.replace("\n"," ")," For:  ",thingtodo,":  ",item," failed")
-			snap = "FAILED"
-
+		print("Entering text: ",text.replace("\n"," ")," For:  ",thingtodo,":  ",item," failed")
+		snap = "FAILED"
 
 	snapit(bafc,"entertext_" + thingtodo,testname,snap)
 
@@ -208,46 +112,17 @@ def hover(bafc,thingtodo,item,testname="NONE", snap="PIC"):
 	if testname != "NONE":
 		testname = testname + "_hover_" + thingtodo + "_"
 
-	options = ["text","partialtext","id","css","xpath","class","name","tag"]
+	element = getelement(driver,thingtodo,item)
+	print(element)
 
 	try:
-		if thingtodo == "text":
-			element_to_hover_over = driver.find_element_by_link_text(item)		
-
-		if thingtodo == "partialtext":
-			element_to_hover_over = driver.find_element_by_partial_link_text(item)
-
-		if thingtodo == "id":
-			element_to_hover_over = driver.find_element_by_id(item)
-
-		if thingtodo == "css":
-			element_to_hover_over = driver.find_element_by_css_selector(item)
-
-		if thingtodo == "xpath":
-			element_to_hover_over = driver.find_element_by_xpath(item)
-
-		if thingtodo == "class":
-			element_to_hover_over = driver.find_element_by_class_name(item)
-
-		if thingtodo == "name":
-			element_to_hover_over = driver.find_element_by_name(item)
-
-		if thingtodo == "tag":
-			element_to_hover_over = driver.find_element_by_tag_name(item)
-
-		if thingtodo in options:
-			print("Hovering over ",thingtodo,":  ",item)
-			hover = ActionChains(driver).move_to_element(element_to_hover_over)
-			hover.perform()	
-
-		if thingtodo not in options:
-			print("The following option is not supported by hover: ",thingtodo)
-			print("Please try one of the following supported options:",options)
-			snap = "FAILED"
+		print("Hovering over ",thingtodo,":  ",item)
+		hover = ActionChains(driver).move_to_element(element)
+		hover.perform()	
 
 	except:
-			print("Hover over ",thingtodo,":  ",item, " failed")
-			snap = "FAILED"
+		print("Hover over ",thingtodo,":  ",item, " failed")
+		snap = "FAILED"
 
 
 	snapit(bafc,"hover_" + thingtodo,testname,snap)
@@ -262,56 +137,24 @@ def hoveroverthis(bafc,thingtodo,item,number,testname="NONE", snap="PIC"):
 	if testname != "NONE":
 		testname = testname + "_hoveroverthis_" + thingtodo + "_"
 
-	options = ["text","partialtext","id","css","xpath","class","name","tag"]
-
+	elements = getelements(driver,thingtodo,item)
 
 	try:
-		if thingtodo == "text":
-			numbers = driver.find_elements_by_link_text(item)	
 
-		if thingtodo == "partialtext":
-			numbers=driver.find_elements_by_partial_link_text(item)
-
-		if thingtodo == "id":
-			numbers=driver.find_elements_by_id(item)
-
-		if thingtodo == "css":
-			numbers=driver.find_elements_by_css_selector(item)
-
-		if thingtodo == "xpath":
-			numbers=driver.find_elements_by_xpath(item)
-
-		if thingtodo == "class":
-			numbers=driver.find_elements_by_class_name(item)
-
-		if thingtodo == "name":
-			numbers=driver.find_elements_by_name(item)
-
-		if thingtodo == "tag":
-			numbers=driver.find_elements_by_tag_name(item)
-
-		if thingtodo in options:
-
-			if number != "loop":
-				print("Hovering over ",thingtodo,":  ",item, " number:  ",number)
-				i=int(number)
-				hover = ActionChains(driver).move_to_element(numbers[i])
-				hover.perform()	
-				snapit(bafc,"hoveroverthis_" + thingtodo,testname,snap)
-			if number == "loop":
-				these = len(numbers)
-				for i in range(0,these):
-					print("Hovering over ",thingtodo,":  ",item, " number:  ",i)
-					hover = ActionChains(driver).move_to_element(numbers[i])
-					hover.perform()	
-					time.sleep(5)
-					snapit(bafc,"hoveroverthis_" + thingtodo + "_" + str(i),testname,snap)
-
-		if thingtodo not in options:
-			print("The following option is not supported by hover over: ",thingtodo)
-			print("Please try one of the following supported options:",options)
-			snap = "FAILED"
+		if number != "loop":
+			print("Hovering over ",thingtodo,":  ",item, " number:  ",number)
+			i=int(number)
+			hover = ActionChains(driver).move_to_element(elements[i])
+			hover.perform()	
 			snapit(bafc,"hoveroverthis_" + thingtodo,testname,snap)
+		if number == "loop":
+			these = len(elements)
+			for i in range(0,these):
+				print("Hovering over ",thingtodo,":  ",item, " number:  ",i)
+				hover = ActionChains(driver).move_to_element(elements[i])
+				hover.perform()	
+				time.sleep(5)
+				snapit(bafc,"hoveroverthis_" + thingtodo + "_" + str(i),testname,snap)
 
 	except:
 			print("Hover over ",thingtodo,":  ",item, " failed.  Recheck the element and the index number.")
@@ -327,50 +170,21 @@ def hoveroffset(bafc,thingtodo,item,offx,offy,testname="NONE", snap="PIC"):
 	if testname != "NONE":
 		testname = testname + "_hoveroffset_" + thingtodo + "_"
 
+	element = getelement(driver,thingtodo,item)
+
 	options = ["text","partialtext","id","css","xpath","class","name","tag"]
 
 	try:
-		if thingtodo == "text":
-			element_to_hover_over = driver.find_element_by_link_text(item)		
-
-		if thingtodo == "partialtext":
-			element_to_hover_over = driver.find_element_by_partial_link_text(item)
-
-		if thingtodo == "id":
-			element_to_hover_over = driver.find_element_by_id(item)
-
-		if thingtodo == "css":
-			element_to_hover_over = driver.find_element_by_css_selector(item)
-
-		if thingtodo == "xpath":
-			element_to_hover_over = driver.find_element_by_xpath(item)
-
-		if thingtodo == "class":
-			element_to_hover_over = driver.find_element_by_class_name(item)
-
-		if thingtodo == "name":
-			element_to_hover_over = driver.find_element_by_name(item)
-
-		if thingtodo == "tag":
-			element_to_hover_over = driver.find_element_by_tag_name(item)
-
-		if thingtodo in options:
-			x = int(offx)
-			y = int(offy)
-			print("Hovering over ",thingtodo,":  ",item, "and offsetting by x,y:  ",offx,",",offy)
-			hover = ActionChains(driver).move_to_element(element_to_hover_over)
-			hover = ActionChains(driver).move_by_offset(x,y)
-			hover.perform()
-		
-
-		if thingtodo not in options:
-			print("The following option is not supported by hover offset: ",thingtodo)
-			print("Please try one of the following supported options:",options)
-			snap = "FAILED"
+		x = int(offx)
+		y = int(offy)
+		print("Hovering over ",thingtodo,":  ",item, "and offsetting by x,y:  ",offx,",",offy)
+		hover = ActionChains(driver).move_to_element(element)
+		hover = ActionChains(driver).move_by_offset(x,y)
+		hover.perform()
 
 	except:
-			print("Hover offset ",thingtodo,":  ",item, " failed")
-			snap = "FAILED"
+		print("Hover offset ",thingtodo,":  ",item, " failed")
+		snap = "FAILED"
 
 
 	snapit(bafc,"hover_" + thingtodo,testname,snap)
@@ -485,6 +299,88 @@ def snapit(bafc,thingtodo,testname,snap):
 			os.system('convert ' + bafc[3] + '/' + filename + ' ' + 'no_baseline_available.png' + ' -flatten ' + bafc[7] + '/' + filename)
 
 	time.sleep(1)
+
+# This function will get an element and return an error if element is not available.
+
+def getelement(driver,thingtodo,item):
+	
+	options = ["text","partialtext","id","css","xpath","class","name","tag"]
+	try:
+
+		if thingtodo == "text":
+			element = driver.find_element_by_link_text(item)		
+
+		if thingtodo == "partialtext":
+			element = driver.find_element_by_partial_link_text(item)
+
+		if thingtodo == "id":
+			element = driver.find_element_by_id(item)
+
+		if thingtodo == "css":
+			element = driver.find_element_by_css_selector(item)
+
+		if thingtodo == "xpath":
+			element = driver.find_element_by_xpath(item)
+
+		if thingtodo == "class":
+			element = driver.find_element_by_class_name(item)
+
+		if thingtodo == "name":
+			element = driver.find_element_by_name(item)
+
+		if thingtodo == "tag":
+			element = driver.find_element_by_tag_name(item)
+
+		if thingtodo not in options:
+			print("The following option is not supported by click: ",thingtodo)
+			print("Please try one of the following supported options:",options)
+			element = "ERROR"
+	except:
+		print("Unable to get the desired element check: ",thingtodo,"  item:  ",item)
+		element = "ERROR"
+
+	return element
+
+# This function will get a set of elements and return an error if the elements are not available.
+
+def getelements(driver,thingtodo,item):
+
+	options = ["text","partialtext","id","css","xpath","class","name","tag"]
+	try:
+
+		if thingtodo == "text":
+			elements = driver.find_elements_by_link_text(item)	
+
+		if thingtodo == "partialtext":
+			elements=driver.find_elements_by_partial_link_text(item)
+
+		if thingtodo == "id":
+			elements=driver.find_elements_by_id(item)
+
+		if thingtodo == "css":
+			elements=driver.find_elements_by_css_selector(item)
+
+		if thingtodo == "xpath":
+			elements=driver.find_elements_by_xpath(item)
+
+		if thingtodo == "class":
+			elements=driver.find_elements_by_class_name(item)
+
+		if thingtodo == "name":
+			elements=driver.find_elements_by_name(item)
+
+		if thingtodo == "tag":
+			elements=driver.find_elements_by_tag_name(item)
+
+		if thingtodo not in options:
+			print("The following option is not supported by click: ",thingtodo)
+			print("Please try one of the following supported options:",options)
+			elements = "ERROR"
+	except:
+		print("Unable to get the desired element check thing to do: ",thingtodo,"  item :  ",item)
+		element = "ERROR"
+
+	return elements
 
 
 
