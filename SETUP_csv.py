@@ -7,8 +7,6 @@ import SELENIUM_functions
 
 
 def csvit(bafc,filename):
-	# scriptname = "CSV_TEST"
-	# bafc.append(scriptname)
 
 	with open(filename,'r') as c:
 		x=0
