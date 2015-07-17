@@ -17,81 +17,77 @@ import time
 # This function will open a web page.  It will replace the 'www' with the server 
 # listed in the config.text file
 
-def open(bafc,page,testname="NONE", snap="PIC"):
+def open(bafc,page,testname="NONE", snap="PIC",teststatus="passed"):
 	driver = bafc[0]
-	if testname != "NONE":
-		testname = testname + "_open_"
-	time.sleep(5)
+	action = "open"
 	try:
 		pagetoopen = page.replace("www", bafc[2])
 		print("Opening: ",pagetoopen)
 		driver.get(pagetoopen)
 
 	except:
-		print("Could not open " + pagetoopen)
-		if snap != "NO" : snap = "FAILED"
+		teststatus = "failed"
 	time.sleep(5)
-	snapit(bafc,"open_",testname,snap)
+	snapit(bafc,"open_",testname,action,snap,teststatus)
 
 # This function will click on an element on the page.
 
-def click(bafc,thingtodo,item,testname="NONE", snap="PIC"):
+def click(bafc,thingtodo,item,testname="NONE", snap="PIC",teststatus="passed"):
 	driver = bafc[0]
-	if testname != "NONE":
-		testname = testname + "_click_" + thingtodo + "_"
+	action = "click_" + thingtodo
 
-	element = getelement(driver,thingtodo,item)
+	element = getelement(driver,thingtodo,item)[0]
+	teststatus = getelement(driver,thingtodo,item)[1]
 
 	try:
 		print("Clicking ",thingtodo,":  ",item)
 		element.click()
 	except:
-		print("Clicking ",thingtodo,":  ",item, " failed")
-		snap = "FAILED"
+		teststatus = "failed"
 
-	snapit(bafc,"click_" + thingtodo,testname,snap)
+	snapit(bafc,"click_" + thingtodo,testname,action,snap,teststatus)
 
 # This function will also click on a specific element
 # on a page in the case where there are multiple elements
 # with the same css, xpath, etc.
 
-def clickthis(bafc,thingtodo,item,number,testname="NONE", snap="PIC"):
+def clickthis(bafc,thingtodo,item,number,testname="NONE", snap="PIC",teststatus="passed"):
 	driver = bafc[0]
-	if testname != "NONE":
-		testname = testname + "_clickthis_" + thingtodo + "_"
+	action = "clickthis_" + thingtodo 
 
-	elements = getelements(driver,thingtodo,item)
+	elements = getelements(driver,thingtodo,item)[0]
+	teststatus = getelements(driver,thingtodo,item)[1]
 
 	try:
 		if number != "loop":
 			print("Clicking ",thingtodo,":  ",item, " number:  ",number)
 			i=int(number)
 			elements[i].click()
-			snapit(bafc,"clickthis_" + thingtodo,testname,snap)
+			snapit(bafc,"clickthis_" + thingtodo,testname,action,snap,teststatus)
 		if number == "loop":
 			these = len(elements)
 			for i in range(0,these):
 				print("Clicking ",thingtodo,":  ",item, " number:  ",i)
 				elements[i].click()
 				time.sleep(5)
-				snapit(bafc,"clickthis_" + thingtodo + "_" + str(i),testname,snap)
+				snapit(bafc,"clickthis_" + thingtodo + "_" + str(i),testname,action,snap,teststatus)
 	except:
-			print("Clicking ",thingtodo,":  ",item, " failed.  Recheck the element and the index number.")
-			snap = "FAILED"
-			snapit(bafc,"clickthis_" + thingtodo,testname,snap)
+			teststatus = "failed"
+			snapit(bafc,"clickthis_" + thingtodo,testname,action,snap,teststatus)
 
 # This function will clear text from a field and enter text to that field.
 
-def entertext(bafc,thingtodo,item,text,testname="NONE", snap="PIC"):
+def entertext(bafc,thingtodo,item,text,testname="NONE", snap="PIC",teststatus="passed"):
 
 	driver = bafc[0]
-	if testname != "NONE":
-		testname = testname + "_entertext_" + thingtodo + "_"
+	action = "entertext_" + thingtodo
 
 	if "\\n" in text:
 		text = text.replace("\\n","") + "\n"
 
-	element = getelement(driver,thingtodo,item)
+	element = getelement(driver,thingtodo,item)[0]
+	teststatus = getelement(driver,thingtodo,item)[1]
+
 
 	try:
 		print("Entering text: ",text.replace("\n"," ")," For:  ",thingtodo,":  ",item)
@@ -99,20 +95,20 @@ def entertext(bafc,thingtodo,item,text,testname="NONE", snap="PIC"):
 		element.send_keys(text)
 
 	except:
-		print("Entering text: ",text.replace("\n"," ")," For:  ",thingtodo,":  ",item," failed")
-		snap = "FAILED"
+		teststatus = "failed"
 
-	snapit(bafc,"entertext_" + thingtodo,testname,snap)
+	snapit(bafc,"entertext_" + thingtodo,testname,action,snap,teststatus)
 
 # This function will hover over a specific element
 
-def hover(bafc,thingtodo,item,testname="NONE", snap="PIC"):
+def hover(bafc,thingtodo,item,testname="NONE", snap="PIC",teststatus="passed"):
 	driver = bafc[0]
+	action = "hover_" + thingtodo
 
-	if testname != "NONE":
-		testname = testname + "_hover_" + thingtodo + "_"
 
-	element = getelement(driver,thingtodo,item)
+	element = getelement(driver,thingtodo,item)[0]
+	teststatus = getelement(driver,thingtodo,item)[1]
+
 	print(element)
 
 	try:
@@ -121,23 +117,21 @@ def hover(bafc,thingtodo,item,testname="NONE", snap="PIC"):
 		hover.perform()	
 
 	except:
-		print("Hover over ",thingtodo,":  ",item, " failed")
-		snap = "FAILED"
+		teststatus = "failed"
 
 
-	snapit(bafc,"hover_" + thingtodo,testname,snap)
+	snapit(bafc,"hover_" + thingtodo,testname,action,snap,teststatus)
 
 # This function will also hover over a specific element
 # on a page in the case where there are multiple elements
 # with the same css, xpath, etc.
 
-def hoveroverthis(bafc,thingtodo,item,number,testname="NONE", snap="PIC"):
+def hoveroverthis(bafc,thingtodo,item,number,testname="NONE", snap="PIC",teststatus="passed"):
 	driver = bafc[0]
+	action = "hoveroverthis_" + thingtodo
 
-	if testname != "NONE":
-		testname = testname + "_hoveroverthis_" + thingtodo + "_"
-
-	elements = getelements(driver,thingtodo,item)
+	elements = getelements(driver,thingtodo,item)[0]
+	teststatus = getelements(driver,thingtodo,item)[1]
 
 	try:
 
@@ -146,7 +140,7 @@ def hoveroverthis(bafc,thingtodo,item,number,testname="NONE", snap="PIC"):
 			i=int(number)
 			hover = ActionChains(driver).move_to_element(elements[i])
 			hover.perform()	
-			snapit(bafc,"hoveroverthis_" + thingtodo,testname,snap)
+			snapit(bafc,"hoveroverthis_" + thingtodo,testname,action,snap,teststatus)
 		if number == "loop":
 			these = len(elements)
 			for i in range(0,these):
@@ -154,23 +148,23 @@ def hoveroverthis(bafc,thingtodo,item,number,testname="NONE", snap="PIC"):
 				hover = ActionChains(driver).move_to_element(elements[i])
 				hover.perform()	
 				time.sleep(5)
-				snapit(bafc,"hoveroverthis_" + thingtodo + "_" + str(i),testname,snap)
+				snapit(bafc,"hoveroverthis_" + thingtodo + "_" + str(i),testname,action,snap,teststatus)
 
 	except:
-			print("Hover over ",thingtodo,":  ",item, " failed.  Recheck the element and the index number.")
-			snap = "FAILED"
-			snapit(bafc,"hoveroverthis_" + thingtodo,testname,snap)
+			teststatus = "failed"
+			snapit(bafc,"hoveroverthis_" + thingtodo,testname,action,snap,teststatus)
 
 
 # This function will go to a specific element and then hover over 
 # a point based on the offset specified.
 
-def hoveroffset(bafc,thingtodo,item,offx,offy,testname="NONE", snap="PIC"):
+def hoveroffset(bafc,thingtodo,item,offx,offy,testname="NONE", snap="PIC",teststatus="passed"):
 	driver = bafc[0]
-	if testname != "NONE":
-		testname = testname + "_hoveroffset_" + thingtodo + "_"
+	action ="hoveroffset_" + thingtodo
 
-	element = getelement(driver,thingtodo,item)
+	element = getelement(driver,thingtodo,item)[0]
+	teststatus = getelement(driver,thingtodo,item)[1]
+
 
 	options = ["text","partialtext","id","css","xpath","class","name","tag"]
 
@@ -183,43 +177,39 @@ def hoveroffset(bafc,thingtodo,item,offx,offy,testname="NONE", snap="PIC"):
 		hover.perform()
 
 	except:
-		print("Hover offset ",thingtodo,":  ",item, " failed")
-		snap = "FAILED"
+		teststatus = "failed"
 
 
-	snapit(bafc,"hover_" + thingtodo,testname,snap)
+	snapit(bafc,"hover_" + thingtodo,testname,action,snap,teststatus)
 
 # This function will navigate back using the browser back.
 
-def goback(bafc,testname="NONE",snap="PIC"):
+def goback(bafc,testname="NONE",snap="PIC",teststatus="passed"):
 	driver = bafc[0]
-	if testname != "NONE":
-		testname = testname + "_goback_" + thingtodo + "_"
+	action = "goback_" + thingtodo
+
 	try:
 		driver.back()
 		time.sleep(5)
-		snapit(bafc,"goback",testname,snap)
+		snapit(bafc,"goback",testname,action,snap,teststatus)
 	except:
-		print("Go back failed")
-		snap = "FAILED"
-		snapit(bafc,"goback",testname,snap)
+		teststatus = "failed"
+		snapit(bafc,"goback",testname,action,snap,teststatus)
 
 # This function will scroll down the page.
 
-def scroll(bafc,scroll="1000",testname="NONE", snap="PIC"):
+def scroll(bafc,scroll="1000",testname="NONE", snap="PIC",teststatus="passed"):
 	driver = bafc[0]
-	if testname != "NONE":
-		testname = testname + "_scroll_" 
+	action = "scroll" 
 
 	try:
 		print("Scrolling:  "  + scroll)
 		c = "window.scrollTo(0," + scroll + ")"
 		driver.execute_script(c)
-		snapit(bafc,"scroll",testname,snap)
+		snapit(bafc,"scroll",testname,action,snap,teststatus)
 	except:
-		print("Scroll failed")
-		snap = "FAILED"
-		snapit(bafc,"scroll",testname,snap)
+		teststatus = "failed"
+		snapit(bafc,"scroll",testname,action,snap,teststatus)
 
 # Custom functions begin
 #         Currently there are no custom functions
@@ -228,12 +218,19 @@ def scroll(bafc,scroll="1000",testname="NONE", snap="PIC"):
 
 # This function takes a screenshot.
 	
-def snapit(bafc,thingtodo,testname,snap):
+def snapit(bafc,thingtodo,testname,action,snap,teststatus):
+
 	browser = bafc[1]
 	trimthese = ["Firefox","IE11","LocalFirefox"]
+	scriptname = bafc[10]
 
 	if testname == "NONE":
-		testname = "TEST_" + (str(round(time.time()))) + "_" + thingtodo
+		testname = "TEST_" + (str(round(time.time()))) + action + "_" + scriptname
+	if testname != "NONE":
+		testname = scriptname + '_' + testname + "_" + action
+
+	print(bafc[10] + "_" + testname + " RESULTS:  " + teststatus)
+
 	if snap == "NO":
 		"Print -- This step does not require picture.  If you are expecting a picture please doublecheck your test."
 	if snap != "NO": 
@@ -259,7 +256,7 @@ def snapit(bafc,thingtodo,testname,snap):
 	
 		except:
 			print("Something went wrong with taking the picture of ",testname)
-	if snap != "NO" and snap != "PIC" and snap != "FAILED":
+	if snap != "NO" and snap != "PIC" and teststatus != "failed":
 		
 		try:
 			time.sleep(5)
@@ -269,7 +266,7 @@ def snapit(bafc,thingtodo,testname,snap):
 		except:
 			print("Something went wrong with taking the picture of name: ",testname)
 
-	if snap == "FAILED":
+	if teststatus == "failed":
 
 		if os.path.exists(bafc[3] + '/' + bafc[1] + '_' + testname + '_FAILURE.png'):
 			os.remove(bafc[3] + '/' + bafc[1] + '_' + testname + '_FAILURE.png')
@@ -302,7 +299,7 @@ def snapit(bafc,thingtodo,testname,snap):
 
 # This function will get an element and return an error if element is not available.
 
-def getelement(driver,thingtodo,item):
+def getelement(driver,thingtodo,item,teststatus="passed"):
 	
 	options = ["text","partialtext","id","css","xpath","class","name","tag"]
 	try:
@@ -335,15 +332,16 @@ def getelement(driver,thingtodo,item):
 			print("The following option is not supported by click: ",thingtodo)
 			print("Please try one of the following supported options:",options)
 			element = "ERROR"
+			teststatus = "failed"
 	except:
-		print("Unable to get the desired element check: ",thingtodo,"  item:  ",item)
 		element = "ERROR"
+		teststatus = "failed"
 
-	return element
+	return element,teststatus
 
 # This function will get a set of elements and return an error if the elements are not available.
 
-def getelements(driver,thingtodo,item):
+def getelements(driver,thingtodo,item,teststatus="passed"):
 
 	options = ["text","partialtext","id","css","xpath","class","name","tag"]
 	try:
@@ -376,11 +374,12 @@ def getelements(driver,thingtodo,item):
 			print("The following option is not supported by click: ",thingtodo)
 			print("Please try one of the following supported options:",options)
 			elements = "ERROR"
+			teststatus = "failed"
 	except:
-		print("Unable to get the desired element check thing to do: ",thingtodo,"  item :  ",item)
 		element = "ERROR"
+		teststatus = "failed"
 
-	return elements
+	return elements,teststatus
 
 
 
