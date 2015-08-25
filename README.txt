@@ -23,8 +23,8 @@ To run individual tests:
 -- .csv are run as ./SETUP_any_csv.py FILENAME.csv 
 
 There are two sample scripts:
- - TEST_example_1.py -- to run "python3 test_example_1.py"
- - CSV_TEST_example_1.csv -- to run "python3 SETUP_any_csv.py test_csv_example_1.csv"
+ - PYTEST_example_1.py -- to run "python3 test_example_1.py"
+ - CSVTEST_example_1.csv -- to run "python3 SETUP_any_csv.py test_csv_example_1.csv"
 
  When run, these scripts will take a screenshot of each step and create a comparison to the baseline image is there is one.
  The Directory "IMAGES" has samples of the images created by these scripts:
