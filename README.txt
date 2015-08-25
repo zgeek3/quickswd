@@ -23,8 +23,8 @@ To run individual tests:
 -- .csv are run as ./SETUP_any_csv.py FILENAME.csv 
 
 There are two sample scripts:
- - PYTEST_example_1.py -- to run "python3 test_example_1.py"
- - CSVTEST_example_1.csv -- to run "python3 SETUP_any_csv.py test_csv_example_1.csv"
+ - PYTEST_example_1.py -- to run "python3 PYTEST_example_1.py"
+ - CSVTEST_example_1.csv -- to run "python3 SETUP_any_csv.py CSVTEST_example_1.csv"
 
  When run, these scripts will take a screenshot of each step and create a comparison to the baseline image is there is one.
  The Directory "IMAGES" has samples of the images created by these scripts:
@@ -32,6 +32,10 @@ There are two sample scripts:
  -- baseline_images - contains images from a previous run of the scripts
  -- new_images - contains the images created when running the script
  -- comparison_images - contains the new images overlapped with a comparison created between baseline_images and new_images
+
+ To run all the tests:
+ -- Name the python selenium tests with 'PYTEST' in the name and the csv selenium scripts with 'CSVTEST' in the name.
+ -- Run 'RUN_tests.py' - This script will look for files with the right names in the directory and will run up to 4 at a time. (This number is hard coded in the script and can easily be changed.)
 
 config.csv
 
