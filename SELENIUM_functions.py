@@ -216,6 +216,7 @@ def scroll(bafc,scroll="1000",testname="NONE", snap="PIC",teststatus="passed"):
 
 # Custom functions end
 
+
 # This function takes a screenshot.
 	
 def snapit(bafc,thingtodo,testname,action,snap,teststatus):
@@ -236,15 +237,20 @@ def snapit(bafc,thingtodo,testname,action,snap,teststatus):
 	if snap != "NO": 
 		# to avoid confusion the old image and any previous failure will be removed before the new image is created
 		# if snapshots are not taken then the old pictures will be left in place
+
 		if os.path.exists(bafc[3] + '/' + bafc[1] + '_' + testname + '.png'):
 			print("Deleting old screenshot")
 			os.remove(bafc[3] + '/' + bafc[1] + '_' + testname + '.png')
-		if os.path.exists(bafc[7] + '/' + bafc[1] + '_' + testname + '.png'):
-			print("Deleting old comparison")
-			os.remove(bafc[7] + '/' + bafc[1] + '_' + testname + '.png')
+	
 		if os.path.exists(bafc[3] + '/' + bafc[1] + '_' + testname + '_FAILURE.png'):
 			print("Deleting old failure screenshot")
 			os.remove(bafc[3] + '/' + bafc[1] + '_' + testname + '_FAILURE.png')
+
+		results_directory = ["ALL","PERFECT_MATCH", "FAILURES","NO_BASELINE"]
+		for result in results_directory:
+			if os.path.exists(bafc[7] + '/' + result +  '/' + bafc[1] + '_' + testname + '.png'):
+				print("Deleting old comparison")
+				os.remove(bafc[7] + '/' + result + '/' + bafc[1] + '_' + testname + '.png')
 
 	if snap == "PIC":
 	
@@ -283,17 +289,27 @@ def snapit(bafc,thingtodo,testname,action,snap,teststatus):
 		print(bafc[6] + '/' + filename)
 		if os.path.exists(bafc[6] + '/' + bafc[1] + '_' + testname + '.png'):
 			print("Baseline image exists:  " + bafc[6] + '/' + bafc[1] + '_' + testname + '.png')
-			os.system(perceptualdiffc + ' ' + bafc[3] + '/' + filename + ' ' + bafc[6] + '/' + filename + ' -verbose -output ' + bafc[7] + '/' + filename)
-			if os.path.exists(bafc[7] + '/' + filename):
-				os.system('convert ' + bafc[7] + '/' + filename + ' -transparent black ' +  bafc[7] + '/' + filename)
-				os.system('convert ' + bafc[7] + '/' + filename + ' -alpha set -channel a -evaluate set 50% +channel ' +  bafc[7] + '/' + filename)
-				os.system('convert ' + bafc[3] + '/' + filename + ' ' + bafc[7] + '/' + filename + ' -flatten ' + bafc[7] + '/' + filename)
-			if not os.path.exists(bafc[7] + '/' + filename):
+
+			############################################################
+			# Need to add check to see if images are same size otherwise there also won't be an image but not a perfect match
+			############################################################
+
+			os.system(perceptualdiffc + ' ' + bafc[3] + '/' + filename + ' ' + bafc[6] + '/' + filename + ' -verbose -output ' + bafc[7] + '/ALL/' + filename)
+			print("Perceptual diff generated")
+			if os.path.exists(bafc[7] + '/' + 'ALL' + '/' + filename):
+				os.system('convert ' + bafc[7] + '/' + 'ALL' + '/' + filename + ' -transparent black ' +  bafc[7] + '/' + 'ALL' + '/' + filename)
+				os.system('convert ' + bafc[7] + '/' + 'ALL' + '/' + filename + ' -alpha set -channel a -evaluate set 50% +channel ' +  bafc[7] + '/' + 'ALL' + '/' + filename)
+				os.system('convert ' + bafc[3] + '/' + filename + ' ' + bafc[7] + '/' + 'ALL' + '/' + filename + ' -flatten ' + bafc[7] + '/' + 'ALL' + '/' + filename)
+			if not os.path.exists(bafc[7] + '/' + 'ALL' + '/' + filename):
 				print("The file doesn't exist so they are a perfect match")
-				os.system('convert ' + bafc[3] + '/' + filename + ' ' + 'perfect_match.png' + ' -flatten ' + bafc[7] + '/' + filename)
+				os.system('convert ' + bafc[3] + '/' + filename + ' ' + 'perfect_match.png' + ' -flatten ' + bafc[7]+ '/' + 'ALL' + '/' + filename)
+				shutil.copyfile(bafc[7]+ '/' + 'ALL' + '/' + filename,bafc[7]+ '/' + 'PERFECT_MATCH' + '/' + filename)
+			if teststatus == "failed":
+				shutil.copyfile(bafc[7]+ '/' + 'ALL' + '/' + filename,bafc[7]+ '/' + 'FAILURES' + '/' + filename)
 		if not os.path.exists(bafc[6] + '/' + bafc[1] + '_' + testname + '.png'):
 			print("Baseline image does not exist:  " + bafc[6] + '/' + bafc[1] + '_' + testname + '.png')
-			os.system('convert ' + bafc[3] + '/' + filename + ' ' + 'no_baseline_available.png' + ' -flatten ' + bafc[7] + '/' + filename)
+			os.system('convert ' + bafc[3] + '/' + filename + ' ' + 'no_baseline_available.png' + ' -flatten ' + bafc[7] + '/' + 'ALL' + '/' + filename)
+			shutil.copyfile(bafc[7]+ '/' + 'ALL' + '/' + filename,bafc[7]+ '/' + 'NO_BASELINE' + '/' + filename)
 
 	time.sleep(1)
 

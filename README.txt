@@ -31,7 +31,7 @@ There are two sample scripts:
 
  -- baseline_images - contains images from a previous run of the scripts
  -- new_images - contains the images created when running the script
- -- comparison_images - contains the new images overlapped with a comparison created between baseline_images and new_images
+ -- comparison_images - contains four directories:  ALL, PERFECT_MATCH, FAILURES, NO_BASELINE - comparison result images will appear here
 
  To run all the tests:
  -- Name the python selenium tests with 'PYTEST' in the name and the csv selenium scripts with 'CSVTEST' in the name.

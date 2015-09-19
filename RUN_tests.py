@@ -22,7 +22,6 @@ for item in files:
 os.system("ps -ef | grep TEST_ | awk '{print $2}' > processlist.txt")
 count = sum(1 for line in open('processlist.txt'))
 
-
 for test in teststorun:
 
     if "CSV" in test:
@@ -34,4 +33,14 @@ for test in teststorun:
         os.system("ps -ef | grep TEST_ | awk '{print $2}' > processlist.txt")
         count = sum(1 for line in open('processlist.txt'))
 
-print ("TESTS COMPLETED")
+count = sum(1 for line in open('processlist.txt'))
+
+while count > 0:
+    time.sleep(30)
+    os.system("ps -ef | grep TEST_ | awk '{print $2}' > processlist.txt")
+    count = sum(1 for line in open('processlist.txt'))
+
+print("TESTS COMPLETED -- Now creating test reports")
+
+print("The following number of tests failed:  )
+
